@@ -1,0 +1,94 @@
+
+ 
+ {{loading}}
+ <button class="btn btn-danger" (click)="triggerModal(modalData)">Create New Post</button>
+
+<table class="table table-responsive table-borderd" >
+    <caption>Posts</caption>
+    <thead>
+      <tr>
+        <th scope="col">title</th>
+        <th scope="col">description</th>
+        <th scope="col">mediapath</th>
+        <th scope="col">privacylvl</th>
+        <th scope="col">postdate</th>
+        <th scope="col">Edit</th>
+        <th scope="col">Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let post of AllPosts.ResData">
+        <td>{{post.title}}</td>
+        <td>{{post.description}}</td>
+        <td><img [src]="post.mediapath" style="height: 100px;" class="img img-sm" [alt]="post._id" /></td>
+        <td>{{post.privacylvl}}</td>
+        <td>{{post.postdate | date:'dd/MM/yyyy'}}</td>
+        <td> <button class="btn btn-primary" (click)="EditModel(post)">Edit</button></td>
+        <td> <button class="btn btn-danger" (click)="DeleteModel(post._id)">Delete</button></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+
+  <ng-template #modalData let-modal id="mdl">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Add new Post</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <form #myForm="ngForm" (ngSubmit)="Post()">
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" class="form-control" id="title" required [(ngModel)]="model.title" name="title" aria-describedby="titlebx" placeholder="Enter Title">
+          </div>
+          <div class="form-group">
+            <label for="desc">Description</label>
+            <input type="text" class="form-control" id="desc"  required [(ngModel)]="model.description" name="description"  placeholder="description">
+          </div>
+          <div class="form-group">
+            <label for="purl">Post Url</label>
+            <input type="text" class="form-control" id="purl" required  [(ngModel)]="model.mediapath" name="mediapath" placeholder="Post Url">
+          </div>
+          <div class="form-group">
+            <label for="select">Select</label>
+            <select id="select"  class="form-control"  required name="formSelect" name="privacylvl" [(ngModel)]="model.privacylvl">
+              <option [value]="null">Default Option</option>
+              <option *ngFor="let option of options" [value]="option.value">
+                {{ option.label }}
+              </option>
+            </select>
+          </div>
+          <br />
+          <div class="form-group">
+              <div *ngIf="this.isEdit" >
+                <button type="submit" class="btn btn-primary" [disabled]="!myForm.valid" >Updae</button>
+              </div>
+              <div *ngIf="!this.isEdit" >
+                <button type="submit" class="btn btn-success" [disabled]="!myForm.valid" >Post</button>
+              </div>
+          </div>
+        </form>
+       
+    </div>
+    <div class="modal-footer">
+    
+    </div>
+  </ng-template>
+
+  <ng-template #modalDelete let-modal >
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Are sure? want to delete this post</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <button type="button" class="btn btn-danger" (click)="ConfirmDelete()">Delete</button>
+    </div>
+    <div class="modal-footer">
+    
+    </div>
+  </ng-template>
